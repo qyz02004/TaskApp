@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         task.setContents("プログラムを書いてPUSHする");
         task.setDate(new Date());
         task.setId(0);
+        task.setCategory("テストカテゴリー");
         mRealm.beginTransaction();
         mRealm.copyToRealmOrUpdate(task);
         mRealm.commitTransaction();
