@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         MenuItem menuItem = menu.findItem(R.id.search_menu_search_view);
         mSearchView = (SearchView) menuItem.getActionView();
+        mSearchView.setQueryHint(getString(R.string.search_hint));
         mSearchView.setOnQueryTextListener(this.onQueryTextListener);
         return true;
     }
