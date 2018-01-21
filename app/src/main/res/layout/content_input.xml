@@ -53,6 +53,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/times_button"
         android:layout_alignParentRight="true"
-        android:text="決定" />
+        android:text="保存" />
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/times_button"
+        android:layout_toLeftOf="@id/done_button"
+        android:text="キャンセル" />
 
 </RelativeLayout>

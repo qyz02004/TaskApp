@@ -70,6 +70,14 @@ public class InputActivity extends AppCompatActivity {
         }
     };
 
+    private View.OnClickListener mOnCancelClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //キャンセルボタンはタスクを追加しないでアクティビティを閉じる
+            finish();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +96,7 @@ public class InputActivity extends AppCompatActivity {
         mTimeButton = (Button)findViewById(R.id.times_button);
         mTimeButton.setOnClickListener(mOnTimeClickListener);
         findViewById(R.id.done_button).setOnClickListener(mOnDoneClickListener);
+        findViewById(R.id.cancel_button).setOnClickListener(mOnCancelClickListener);
         mTitleEdit = (EditText)findViewById(R.id.title_edit_text);
         mContentEdit = (EditText)findViewById(R.id.content_edit_text);
         mCategoryEdit = (EditText)findViewById(R.id.category_edit_text);
@@ -150,11 +159,11 @@ public class InputActivity extends AppCompatActivity {
 
         String title = mTitleEdit.getText().toString();
         String content = mContentEdit.getText().toString();
-        String catecory = mCategoryEdit.getText().toString();
+        String category = mCategoryEdit.getText().toString();
 
         mTask.setTitle(title);
         mTask.setContents(content);
-        mTask.setCategory(catecory);
+        mTask.setCategory(category);
         GregorianCalendar calendar = new GregorianCalendar(mYear,mMonth,mDay,mHour,mMinute);
         Date date = calendar.getTime();
         mTask.setDate(date);
