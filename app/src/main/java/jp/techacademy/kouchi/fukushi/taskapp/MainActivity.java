@@ -13,6 +13,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -133,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.search_menu_search_view);
         mSearchView = (SearchView) menuItem.getActionView();
         mSearchView.setQueryHint(getString(R.string.search_hint));
+        // 端末が横向きのとき検索入力が展開しないようにする
+        mSearchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH|EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         mSearchView.setOnQueryTextListener(this.onQueryTextListener);
         return true;
     }
