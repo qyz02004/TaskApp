@@ -9,6 +9,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -27,11 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private RealmChangeListener mRealmListener = new RealmChangeListener() {
         @Override
         public void onChange(Object element) {
-            reloadListView();
+            reloadListView(null);
         }
     };
     private ListView mListView;
     private TaskAdapter mTaskAdapter;
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +123,50 @@ public class MainActivity extends AppCompatActivity {
 
         reloadListView();
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        // 検索バーを追加
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.search_menu_search_view);
+        mSearchView = (SearchView) menuItem.getActionView();
+        mSearchView.setOnQueryTextListener(this.onQueryTextListener);
+        return true;
+    }
+
+    private SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String searchWord) {
+            reloadListView(searchWord);
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            if ( newText.isEmpty() ) {
+                reloadListView(null);
+            }
+            return false;
+        }
+    };
 
     private void reloadListView() {
+        reloadListView(null );
+    }
+    private void reloadListView( String category ) {
         // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
-        RealmResults<Task> taskRealmResults = mRealm.where(Task.class).findAllSorted("date", Sort.DESCENDING);
+        RealmResults<Task> taskRealmResults;
+        if ( category != null ) {
+            // カテゴリを指定して検索
+            taskRealmResults = mRealm.where(Task.class)
+                    .equalTo("category", category)
+                    .findAllSorted("date", Sort.DESCENDING);
+        }else {
+            taskRealmResults = mRealm.where(Task.class)
+                    .findAllSorted("date", Sort.DESCENDING);
+        }
         // 上記の結果を、TaskList としてセットする
         mTaskAdapter.setTaskList(mRealm.copyFromRealm(taskRealmResults));
         // TaskのListView用のアダプタに渡す
